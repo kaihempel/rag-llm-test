@@ -6,7 +6,7 @@ A local Retrieval-Augmented Generation (RAG) system built with Python that allow
 
 - **Multiple Document Formats**: Supports PDF, DOC, DOCX, ODT, and CSV files
 - **Local Vector Database**: Uses ChromaDB for efficient document storage and retrieval
-- **External LLM Integration**: Supports OpenAI GPT and Anthropic Claude models
+- **External LLM Integration**: Supports OpenAI GPT, Anthropic Claude, and Mistral AI models
 - **Local Embeddings**: Uses sentence-transformers for local embedding generation
 - **Simple CLI Interface**: Easy-to-use command-line interface built with Click
 - **Document Chunking**: Intelligent text chunking with overlap for better context retrieval
@@ -51,6 +51,9 @@ OPENAI_API_KEY=your-openai-api-key-here
 
 # For Anthropic Claude
 ANTHROPIC_API_KEY=your-anthropic-api-key-here
+
+# For Mistral AI
+MISTRAL_API_KEY=your-mistral-api-key-here
 ```
 
 Alternatively, export them directly:
@@ -58,6 +61,8 @@ Alternatively, export them directly:
 export OPENAI_API_KEY='your-key-here'
 # or
 export ANTHROPIC_API_KEY='your-key-here'
+# or
+export MISTRAL_API_KEY='your-key-here'
 ```
 
 ## Usage
@@ -101,6 +106,9 @@ python cli.py query "What are the main findings in the documents?"
 # Using Anthropic Claude
 python cli.py query "Summarize the key points" --provider anthropic
 
+# Using Mistral AI
+python cli.py query "What are the implications?" --provider mistral
+
 # Show source documents
 python cli.py query "What is the conclusion?" --show-sources
 
@@ -109,7 +117,7 @@ python cli.py query "Explain the methodology" --provider openai --model gpt-4
 ```
 
 **Query Options:**
-- `--provider`: LLM provider (`openai` or `anthropic`) - default: `openai`
+- `--provider`: LLM provider (`openai`, `anthropic`, or `mistral`) - default: `openai`
 - `--model`: Specific model name (optional)
 - `--api-key`: API key (if not set via environment variable)
 - `--num-results`: Number of context chunks to retrieve (default: 5)
@@ -156,7 +164,7 @@ python cli.py --db-path ./my_custom_db --collection my_docs add_document paper.p
    - Provides query functionality for context retrieval
 
 3. **LLM Integration** (`llm_integration.py`)
-   - Integrates with external LLM providers (OpenAI, Anthropic)
+   - Integrates with external LLM providers (OpenAI, Anthropic, Mistral)
    - Generates responses based on retrieved contexts
    - Supports multiple model configurations
 
@@ -199,6 +207,11 @@ python cli.py --db-path ./my_custom_db --collection my_docs add_document paper.p
 - Default model: `claude-3-5-sonnet-20241022`
 - Requires: `ANTHROPIC_API_KEY`
 - Supported models: `claude-3-5-sonnet-20241022`, `claude-3-opus-20240229`, etc.
+
+**Mistral AI:**
+- Default model: `mistral-large-latest`
+- Requires: `MISTRAL_API_KEY`
+- Supported models: `mistral-large-latest`, `mistral-medium-latest`, `mistral-small-latest`, etc.
 
 ### Embedding Model
 
