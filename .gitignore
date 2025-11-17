@@ -33,6 +33,9 @@ ENV/
 # ChromaDB database
 chroma_db/
 
+# Token usage logs
+logs/
+
 # IDE
 .vscode/
 .idea/

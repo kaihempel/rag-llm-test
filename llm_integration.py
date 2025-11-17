@@ -4,6 +4,7 @@ LLM integration module for generating responses using external models.
 import os
 from typing import List, Dict, Optional
 from abc import ABC, abstractmethod
+from token_logger import get_logger
 
 try:
     import openai
@@ -76,6 +77,16 @@ Please provide a detailed answer based on the context above."""
             max_tokens=1000
         )
 
+        # Log token usage
+        if response.usage:
+            logger = get_logger()
+            logger.log_usage(
+                provider="openai",
+                model=self.model,
+                input_tokens=response.usage.prompt_tokens,
+                output_tokens=response.usage.completion_tokens
+            )
+
         return response.choices[0].message.content
 
 
@@ -121,6 +132,16 @@ Please provide a detailed answer based on the context above. If the answer canno
             ]
         )
 
+        # Log token usage
+        if response.usage:
+            logger = get_logger()
+            logger.log_usage(
+                provider="anthropic",
+                model=self.model,
+                input_tokens=response.usage.input_tokens,
+                output_tokens=response.usage.output_tokens
+            )
+
         return response.content[0].text
 
 
@@ -164,6 +185,16 @@ Please provide a detailed answer based on the context above. If the answer canno
                 {"role": "user", "content": user_prompt}
             ]
         )
+
+        # Log token usage
+        if hasattr(response, 'usage') and response.usage:
+            logger = get_logger()
+            logger.log_usage(
+                provider="mistral",
+                model=self.model,
+                input_tokens=response.usage.prompt_tokens,
+                output_tokens=response.usage.completion_tokens
+            )
 
         return response.choices[0].message.content
 
