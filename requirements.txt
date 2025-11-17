@@ -18,6 +18,7 @@ langchain-community==0.0.16
 # External LLM Integration
 openai==1.10.0
 anthropic==0.18.1
+mistralai==0.1.8
 
 # Utilities
 python-dotenv==1.0.0

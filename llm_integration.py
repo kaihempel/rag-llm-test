@@ -15,6 +15,11 @@ try:
 except ImportError:
     anthropic = None
 
+try:
+    from mistralai.client import MistralClient
+except ImportError:
+    MistralClient = None
+
 
 class LLMProvider(ABC):
     """Abstract base class for LLM providers."""
@@ -119,12 +124,57 @@ Please provide a detailed answer based on the context above. If the answer canno
         return response.content[0].text
 
 
+class MistralProvider(LLMProvider):
+    """Mistral AI LLM provider."""
+
+    def __init__(self, api_key: Optional[str] = None, model: str = "mistral-large-latest"):
+        """
+        Initialize Mistral provider.
+
+        Args:
+            api_key: Mistral API key (or set MISTRAL_API_KEY env var)
+            model: Model to use (default: mistral-large-latest)
+        """
+        if MistralClient is None:
+            raise ImportError("Mistral library not installed. Install with: pip install mistralai")
+
+        self.api_key = api_key or os.getenv("MISTRAL_API_KEY")
+        if not self.api_key:
+            raise ValueError("Mistral API key not provided")
+
+        self.client = MistralClient(api_key=self.api_key)
+        self.model = model
+
+    def generate(self, prompt: str, context: List[str]) -> str:
+        """Generate a response using Mistral AI."""
+        context_text = "\n\n".join([f"Document {i+1}:\n{ctx}" for i, ctx in enumerate(context)])
+
+        user_prompt = f"""You are a helpful assistant that answers questions based on the provided context.
+
+Context documents:
+{context_text}
+
+Question: {prompt}
+
+Please provide a detailed answer based on the context above. If the answer cannot be found in the context, say so clearly."""
+
+        response = self.client.chat(
+            model=self.model,
+            messages=[
+                {"role": "user", "content": user_prompt}
+            ]
+        )
+
+        return response.choices[0].message.content
+
+
 class LLMFactory:
     """Factory for creating LLM providers."""
 
     PROVIDERS = {
         'openai': OpenAIProvider,
         'anthropic': AnthropicProvider,
+        'mistral': MistralProvider,
     }
 
     @staticmethod
@@ -133,7 +183,7 @@ class LLMFactory:
         Create an LLM provider.
 
         Args:
-            provider_name: Name of the provider (openai, anthropic)
+            provider_name: Name of the provider (openai, anthropic, mistral)
             **kwargs: Additional arguments for the provider
 
         Returns:
