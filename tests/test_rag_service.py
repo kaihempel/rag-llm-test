@@ -8,7 +8,7 @@ import shutil
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-from rag_service import RAGService
+from src.rag_service import RAGService
 
 
 @pytest.fixture

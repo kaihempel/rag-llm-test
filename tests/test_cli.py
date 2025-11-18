@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from click.testing import CliRunner
 
-from cli import cli, add_document, query, stats, clear, usage
+from src.cli import cli, add_document, query, stats, clear, usage
 
 
 @pytest.fixture

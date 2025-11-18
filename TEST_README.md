@@ -4,8 +4,8 @@ This document describes the test suite for the RAG (Retrieval-Augmented Generati
 
 ## Test Files
 
-### 1. `test_rag_service.py`
-Tests for the core RAG service functionality (`rag_service.py`).
+### 1. `tests/test_rag_service.py`
+Tests for the core RAG service functionality (`src/rag_service.py`).
 
 **Test Coverage:**
 - `TestRAGServiceInitialization`: Database initialization and setup
@@ -26,8 +26,8 @@ Tests for the core RAG service functionality (`rag_service.py`).
 - Metadata tracking
 - Error handling for empty content
 
-### 2. `test_document_loader.py`
-Tests for document loading functionality (`document_loader.py`).
+### 2. `tests/test_document_loader.py`
+Tests for document loading functionality (`src/document_loader.py`).
 
 **Test Coverage:**
 - `TestDocumentLoaderBasics`: Core loader functionality
@@ -48,8 +48,8 @@ Tests for document loading functionality (`document_loader.py`).
 - Special characters and Unicode handling
 - Empty file handling
 
-### 3. `test_cli.py`
-Tests for the command-line interface (`cli.py`).
+### 3. `tests/test_cli.py`
+Tests for the command-line interface (`src/cli.py`).
 
 **Test Coverage:**
 - `TestCLIBasics`: CLI initialization and help
@@ -101,26 +101,26 @@ pytest --cov=. --cov-report=html
 
 ```bash
 # Test RAG service only
-pytest test_rag_service.py -v
+pytest tests/test_rag_service.py -v
 
 # Test document loader only
-pytest test_document_loader.py -v
+pytest tests/test_document_loader.py -v
 
 # Test CLI commands only
-pytest test_cli.py -v
+pytest tests/test_cli.py -v
 ```
 
 ### Running Specific Test Classes
 
 ```bash
 # Test only chunk text functionality
-pytest test_rag_service.py::TestChunkText -v
+pytest tests/test_rag_service.py::TestChunkText -v
 
 # Test only CSV loading
-pytest test_document_loader.py::TestLoadCSV -v
+pytest tests/test_document_loader.py::TestLoadCSV -v
 
 # Test only query command
-pytest test_cli.py::TestQueryCommand -v
+pytest tests/test_cli.py::TestQueryCommand -v
 ```
 
 ### Running Integration Tests
@@ -190,9 +190,16 @@ jobs:
 
 ```
 rag-llm-test/
-├── test_rag_service.py      # RAG database tests (200+ lines)
-├── test_document_loader.py  # Document parsing tests (330+ lines)
-├── test_cli.py              # CLI command tests (430+ lines)
+├── src/                     # Source code
+│   ├── cli.py
+│   ├── document_loader.py
+│   ├── llm_integration.py
+│   ├── rag_service.py
+│   └── token_logger.py
+├── tests/                   # Test files
+│   ├── test_rag_service.py      # RAG database tests (200+ lines)
+│   ├── test_document_loader.py  # Document parsing tests (330+ lines)
+│   └── test_cli.py              # CLI command tests (430+ lines)
 ├── pytest.ini               # Pytest configuration
 └── TEST_README.md           # This file
 ```
