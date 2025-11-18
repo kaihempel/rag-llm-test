@@ -5,7 +5,7 @@ Test script for token logger functionality.
 import os
 import sys
 from datetime import datetime
-from token_logger import get_logger
+from src.token_logger import get_logger
 
 
 def test_token_logger():

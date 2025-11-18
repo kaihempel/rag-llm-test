@@ -10,7 +10,7 @@ import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
-from document_loader import DocumentLoader
+from src.document_loader import DocumentLoader
 
 
 class RAGService:

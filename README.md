@@ -72,7 +72,7 @@ export MISTRAL_API_KEY='your-key-here'
 The CLI provides the following commands:
 
 ```bash
-python cli.py [OPTIONS] COMMAND [ARGS]...
+python src/cli.py [OPTIONS] COMMAND [ARGS]...
 ```
 
 ### Add Documents
@@ -80,14 +80,14 @@ python cli.py [OPTIONS] COMMAND [ARGS]...
 Add a document to the RAG database:
 
 ```bash
-python cli.py add_document <file_path>
+python src/cli.py add_document <file_path>
 ```
 
 **Examples:**
 ```bash
-python cli.py add_document research_paper.pdf
-python cli.py add_document data.csv
-python cli.py add_document report.docx
+python src/cli.py add_document research_paper.pdf
+python src/cli.py add_document data.csv
+python src/cli.py add_document report.docx
 ```
 
 ### Query Documents
@@ -95,25 +95,25 @@ python cli.py add_document report.docx
 Query the database and get AI-generated responses:
 
 ```bash
-python cli.py query "Your question here"
+python src/cli.py query "Your question here"
 ```
 
 **Examples:**
 ```bash
 # Using OpenAI (default)
-python cli.py query "What are the main findings in the documents?"
+python src/cli.py query "What are the main findings in the documents?"
 
 # Using Anthropic Claude
-python cli.py query "Summarize the key points" --provider anthropic
+python src/cli.py query "Summarize the key points" --provider anthropic
 
 # Using Mistral AI
-python cli.py query "What are the implications?" --provider mistral
+python src/cli.py query "What are the implications?" --provider mistral
 
 # Show source documents
-python cli.py query "What is the conclusion?" --show-sources
+python src/cli.py query "What is the conclusion?" --show-sources
 
 # Use specific model
-python cli.py query "Explain the methodology" --provider openai --model gpt-4
+python src/cli.py query "Explain the methodology" --provider openai --model gpt-4
 ```
 
 **Query Options:**
@@ -129,7 +129,7 @@ python cli.py query "Explain the methodology" --provider openai --model gpt-4
 Check database statistics:
 
 ```bash
-python cli.py stats
+python src/cli.py stats
 ```
 
 ### Clear Database
@@ -137,7 +137,7 @@ python cli.py stats
 Remove all documents from the database:
 
 ```bash
-python cli.py clear
+python src/cli.py clear
 ```
 
 ### Global Options
@@ -147,28 +147,28 @@ python cli.py clear
 
 **Example:**
 ```bash
-python cli.py --db-path ./my_custom_db --collection my_docs add_document paper.pdf
+python src/cli.py --db-path ./my_custom_db --collection my_docs add_document paper.pdf
 ```
 
 ## Architecture
 
 ### Components
 
-1. **Document Loader** (`document_loader.py`)
+1. **Document Loader** (`src/document_loader.py`)
    - Handles loading and parsing of various document formats
    - Extracts text content from PDF, DOC, DOCX, ODT, and CSV files
 
-2. **RAG Service** (`rag_service.py`)
+2. **RAG Service** (`src/rag_service.py`)
    - Manages the ChromaDB vector database
    - Handles document chunking and embedding generation
    - Provides query functionality for context retrieval
 
-3. **LLM Integration** (`llm_integration.py`)
+3. **LLM Integration** (`src/llm_integration.py`)
    - Integrates with external LLM providers (OpenAI, Anthropic, Mistral)
    - Generates responses based on retrieved contexts
    - Supports multiple model configurations
 
-4. **CLI Interface** (`cli.py`)
+4. **CLI Interface** (`src/cli.py`)
    - Command-line interface built with Click
    - User-friendly commands for all operations
 
@@ -223,21 +223,21 @@ python cli.py --db-path ./my_custom_db --collection my_docs add_document paper.p
 
 ```bash
 # 1. Add some documents
-python cli.py add_document research_paper.pdf
-python cli.py add_document data_analysis.csv
-python cli.py add_document meeting_notes.docx
+python src/cli.py add_document research_paper.pdf
+python src/cli.py add_document data_analysis.csv
+python src/cli.py add_document meeting_notes.docx
 
 # 2. Check statistics
-python cli.py stats
+python src/cli.py stats
 
 # 3. Query your documents
-python cli.py query "What are the main findings?" --show-sources
+python src/cli.py query "What are the main findings?" --show-sources
 
 # 4. Use a different provider
-python cli.py query "Summarize the data" --provider anthropic
+python src/cli.py query "Summarize the data" --provider anthropic
 
 # 5. Clear database when done
-python cli.py clear
+python src/cli.py clear
 ```
 
 ## Troubleshooting

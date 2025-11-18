@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from io import BytesIO
 
-from document_loader import DocumentLoader
+from src.document_loader import DocumentLoader
 
 # Try importing document creation libraries
 try:
