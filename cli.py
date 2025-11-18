@@ -73,7 +73,7 @@ def add_document(ctx, file_path):
 
 @cli.command()
 @click.argument('query_text')
-@click.option('--provider', default='openai', help='LLM provider (openai, anthropic)')
+@click.option('--provider', default='openai', help='LLM provider (openai, anthropic, mistral, gemini)')
 @click.option('--model', help='Model name (optional)')
 @click.option('--api-key', help='API key (or set via environment variable)')
 @click.option('--num-results', default=5, help='Number of context chunks to retrieve')
@@ -92,6 +92,8 @@ def query(ctx, query_text, provider, model, api_key, num_results, max_contexts, 
     Environment variables:
         OPENAI_API_KEY: OpenAI API key
         ANTHROPIC_API_KEY: Anthropic API key
+        MISTRAL_API_KEY: Mistral API key
+        GOOGLE_API_KEY: Google API key (for Gemini)
     """
     try:
         click.echo(f"\n🔍 Processing query: {query_text}\n")
@@ -157,6 +159,8 @@ def query(ctx, query_text, provider, model, api_key, num_results, max_contexts, 
         click.echo("\nMake sure to set your API key:", err=True)
         click.echo("  - OpenAI: export OPENAI_API_KEY='your-key'", err=True)
         click.echo("  - Anthropic: export ANTHROPIC_API_KEY='your-key'", err=True)
+        click.echo("  - Mistral: export MISTRAL_API_KEY='your-key'", err=True)
+        click.echo("  - Gemini: export GOOGLE_API_KEY='your-key'", err=True)
         sys.exit(1)
     except Exception as e:
         click.echo(f"\n❌ Error: {str(e)}", err=True)
