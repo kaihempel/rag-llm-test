@@ -21,6 +21,11 @@ try:
 except ImportError:
     MistralClient = None
 
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
+
 
 class LLMProvider(ABC):
     """Abstract base class for LLM providers."""
@@ -199,6 +204,57 @@ Please provide a detailed answer based on the context above. If the answer canno
         return response.choices[0].message.content
 
 
+class GeminiProvider(LLMProvider):
+    """Google Gemini LLM provider."""
+
+    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-pro"):
+        """
+        Initialize Gemini provider.
+
+        Args:
+            api_key: Google API key (or set GOOGLE_API_KEY env var)
+            model: Model to use (default: gemini-pro)
+        """
+        if genai is None:
+            raise ImportError("Google Generative AI library not installed. Install with: pip install google-generativeai")
+
+        self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
+        if not self.api_key:
+            raise ValueError("Google API key not provided")
+
+        genai.configure(api_key=self.api_key)
+        self.model_name = model
+        self.model = genai.GenerativeModel(model)
+
+    def generate(self, prompt: str, context: List[str]) -> str:
+        """Generate a response using Google Gemini."""
+        context_text = "\n\n".join([f"Document {i+1}:\n{ctx}" for i, ctx in enumerate(context)])
+
+        user_prompt = f"""You are a helpful assistant that answers questions based on the provided context.
+
+Context documents:
+{context_text}
+
+Question: {prompt}
+
+Please provide a detailed answer based on the context above. If the answer cannot be found in the context, say so clearly."""
+
+        response = self.model.generate_content(user_prompt)
+
+        # Log token usage
+        # Note: Gemini's response metadata includes usage information
+        if hasattr(response, 'usage_metadata') and response.usage_metadata:
+            logger = get_logger()
+            logger.log_usage(
+                provider="gemini",
+                model=self.model_name,
+                input_tokens=response.usage_metadata.prompt_token_count,
+                output_tokens=response.usage_metadata.candidates_token_count
+            )
+
+        return response.text
+
+
 class LLMFactory:
     """Factory for creating LLM providers."""
 
@@ -206,6 +262,7 @@ class LLMFactory:
         'openai': OpenAIProvider,
         'anthropic': AnthropicProvider,
         'mistral': MistralProvider,
+        'gemini': GeminiProvider,
     }
 
     @staticmethod
@@ -214,7 +271,7 @@ class LLMFactory:
         Create an LLM provider.
 
         Args:
-            provider_name: Name of the provider (openai, anthropic, mistral)
+            provider_name: Name of the provider (openai, anthropic, mistral, gemini)
             **kwargs: Additional arguments for the provider
 
         Returns:
