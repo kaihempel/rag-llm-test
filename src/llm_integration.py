@@ -4,7 +4,7 @@ LLM integration module for generating responses using external models.
 import os
 from typing import List, Dict, Optional
 from abc import ABC, abstractmethod
-from src.token_logger import get_logger
+from token_logger import get_logger
 
 try:
     import openai

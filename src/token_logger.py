@@ -5,7 +5,6 @@ Logs LLM token usage to date-specific files for cost monitoring and analysis.
 """
 
 import json
-import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional

@@ -9,9 +9,9 @@ from pathlib import Path
 import click
 from dotenv import load_dotenv
 
-from src.rag_service import RAGService
-from src.llm_integration import LLMFactory, generate_rag_response
-from src.token_logger import get_logger
+from rag_service import RAGService
+from llm_integration import LLMFactory, generate_rag_response
+from token_logger import get_logger
 
 
 # Load environment variables

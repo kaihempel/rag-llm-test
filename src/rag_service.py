@@ -1,16 +1,14 @@
 """
 RAG (Retrieval-Augmented Generation) service for document storage and querying.
 """
-import os
 from typing import List, Dict, Optional
-from pathlib import Path
 import hashlib
 
 import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
-from src.document_loader import DocumentLoader
+from document_loader import DocumentLoader
 
 
 class RAGService:
